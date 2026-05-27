@@ -6,7 +6,9 @@
 [![AGI-26](https://img.shields.io/badge/AGI--26-accepted-brightgreen.svg)](https://agi-conf.org/)
 [![Springer LNAI](https://img.shields.io/badge/Springer-LNAI-blue.svg)](https://www.springer.com/series/1244)
 
-Pragmatic intelligence as efficient environmental entropy reduction: implementation and evaluation of I_cd = (-ΔS/W) × H(C).
+Pragmatic intelligence as efficient environmental entropy reduction: implementation and evaluation of
+
+$$I_{cd} = \frac{-\Delta S}{W} \times H(C)$$
 
 ## Paper
 
