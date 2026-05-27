@@ -1,0 +1,392 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+  pdftitle={Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence},
+  pdfauthor={Dario Cazzani}
+}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+
+\newtheorem{observation}{Observation}
+
+\begin{document}
+
+\title{Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence}
+\titlerunning{Efficient Entropy Reduction as Pragmatic Intelligence Measure}
+
+\author{Dario Cazzani\inst{1}}
+\authorrunning{D. Cazzani}
+\institute{Cisco Systems Inc. \email{dcazzani@cisco.com}}
+
+\maketitle
+
+\begin{abstract}
+We propose $I_{cd} {=} (-\Delta S / W) {\times} H(C)$, a computable, substrate-independent measure of \emph{pragmatic} intelligence: the capacity for efficient environmental entropy reduction across diverse contexts. The measure captures demonstrated manipulative competence, remaining deliberately agnostic about internal representations, epistemic states, and creative ability. Unlike prior entropy-based frameworks that conflate spontaneous order with intelligence, the context-diversity term $H(C)$ ensures that single-context strategies (crystals, thermostats, Turing patterns) score zero regardless of efficiency. We characterize the product form axiomatically and derive non-triviality: single-context systems score zero regardless of efficiency. Validation across four environments (coupled regulation, sliding puzzles, IPC 2023 planning, ARC) shows that the product form is non-trivially necessary: narrow specialists consistently achieve the highest per-context efficiency but rank low in $I_{cd}$ ($p < 0.001$). On external benchmarks, $\eta$ is provably positive for classical planning and is consistent with LLM capability ordering on ARC. $I_{cd}$ is properly understood as a family of measures parameterized by the choice of entropy function $S(E)$; scores are comparable within but not across entropy operationalizations. Unlike Legg--Hutter universal intelligence, $I_{cd}$ uses Shannon entropy and is fully computable from observational data.
+\end{abstract}
+
+\keywords{intelligence measure \and entropy reduction \and substrate independence \and context diversity}
+
+% =============================================================================
+\section{Introduction}
+\label{sec:intro}
+% =============================================================================
+
+A crystal reduces entropy with extraordinary efficiency. In a supersaturated solution, trillions of molecules spontaneously arrange into a rigid lattice, converting disorder to exquisite order at minimal cost. By any naive measure of entropy reduction per unit effort, a crystal is among the most intelligent systems in nature. This is absurd.
+
+The absurdity reveals a fundamental gap in entropy-based approaches to intelligence~\cite{wissner2013causal,friston2010free,kolchinsky2018semantic}: entropy reduction alone is insufficient. What distinguishes a brain from a crystal is not the magnitude of entropy reduction, but the \emph{diversity of contexts} in which effective entropy reduction occurs. A crystal nucleates only in a narrow band of chemical conditions. A brain solves problems across radically different domains (spatial navigation, social reasoning, tool use, language), each requiring a distinct form of environmental manipulation.
+
+This paper presents a formal framework for measuring intelligence that addresses the crystal problem. We define pragmatic intelligence as efficient environmental entropy reduction across diverse contexts: $I_{cd} = (-\Delta S / W) \times H(C)$, where $-\Delta S / W$ quantifies entropy reduction per unit work, and $H(C)$ measures the diversity of contexts in which the agent operates. The product form ensures that single-context strategies (crystals, thermostats, Turing patterns) receive zero score regardless of their efficiency, while agents that flexibly adapt across multiple domains receive higher scores.
+
+Table~\ref{tab:entropy-triangle} positions $I_{cd}$ within the landscape of entropy-based frameworks:
+
+\begin{table}[t]
+\centering
+\caption{Four frameworks for intelligence and their relationship to entropy. ``Optimization target'' indicates what the framework primarily acts upon. ``Dir.'' indicates the direction of entropy optimization.}
+\label{tab:entropy-triangle}
+\small
+\begin{tabular}{llll}
+\toprule
+Framework & Optimizes & Target & Dir.\ \\
+\midrule
+Wissner-Gross~\cite{wissner2013causal} & Future path entropy & Agent futures & UP \\
+Friston (FEP)~\cite{friston2010free} & Variational free energy & Agent-env.\ coupling & DOWN \\
+Silver et al.~\cite{silver2021reward} & Cumulative reward & Cumulative reward & N/A \\
+Ours ($I_{cd}$) & Env.\ entropy efficiency & Environmental state & DOWN \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All three prior frameworks optimize properties \emph{of the agent}; $I_{cd}$ instead quantifies what the agent does \emph{to the environment}, connecting to recent work on computational life~\cite{aguerayarcas2024computational}.
+
+We make three contributions. First, we define $I_{cd}$ formally and characterize its product form axiomatically (Proposition~2): scale covariance and normalization uniquely determine $\eta \times H(C)$. Second, we situate $I_{cd}$ within the landscape of existing frameworks. Third, we demonstrate the measure computationally across four environments: coupled regulation confirms $\eta$ (entropy-reduction efficiency) rankings (50 seeds, Wilcoxon signed-rank tests), a variable-size sliding puzzle demonstrates joint factor discrimination, IPC 2023 classical planning confirms the pattern on an external benchmark with provably positive $\eta$, and ARC evaluation shows $\eta$ consistent with LLM capability ordering.
+
+Section~\ref{sec:measure} defines $I_{cd}$ and derives its properties. Section~\ref{sec:related} positions $I_{cd}$ against related work. Section~\ref{sec:experiments} presents computational validation across four environments. Section~\ref{sec:discussion} discusses limitations and concludes.
+
+% =============================================================================
+\section{The Measure}
+\label{sec:measure}
+% =============================================================================
+
+We develop $I_{cd}$ in stages: definitions of each component, the crystal problem motivating the context-diversity term, the full composite measure, and its formal properties.
+
+\subsection{Components of the Measure}
+\label{sec:definitions}
+
+We operationalize pragmatic intelligence as the efficiency with which an agent reduces environmental entropy across diverse contexts. The resulting measure $I_{cd}$ (where \emph{cd} denotes \emph{context diversity}) requires four components (we use $S$ for environmental entropy and $H$ for context diversity throughout; both are Shannon entropy in nats, computed using natural logarithms):
+
+\begin{enumerate}
+\item \textbf{Environmental entropy.} $S(E) = H(X) = -\sum_{x} p(x) \ln p(x)$, where $X$ is a domain-specific random variable over observable environmental states and $p(x)$ is the empirical frequency~\cite{jaynes1957information,zurek1989algorithmic,kolchinsky2018semantic}.
+
+\item \textbf{Entropy change.} Over evaluation window $[t, t{+}\Delta]$: $\Delta S = S(E_{t+\Delta}) - S(E_t)$. Negative values indicate entropy reduction.
+
+\item \textbf{Work.} Cumulative action cost: $W = \sum_{i=1}^{n} c(a_i)$, where $a_i$ is the agent's $i$-th action and $c(\cdot)$ is a domain-specific cost function (e.g., unit cost per action, plan length). Systems lacking autonomous action capacity (viruses, prions) fall outside the measure's domain, since $W$ requires agent-initiated actions.
+
+\item \textbf{Efficiency.} The base measure combining (1)--(3):
+\begin{equation}
+\eta = \frac{-\Delta S}{W}
+\end{equation}
+Positive $\eta$ indicates entropy reduction per unit action cost.
+\end{enumerate}
+
+For $I_{cd}$ to be well-defined, $S(E)$ must satisfy: (i)~$S(E) \geq 0$; (ii)~$S(E) = 0$ only when the environment is in a maximally ordered state; and (iii)~$S(E)$ is defined over observable environmental degrees of freedom, not agent-internal states. For spatially structured environments, lossless compression length provides an asymptotically equivalent entropy rate estimator via the source coding theorem~\cite{cover2006elements}. In specific domains, $S(E)$ instantiates as entropy over deviation-magnitude distributions (coupled regulation), count of unsatisfied goal predicates (classical planning), or compressed length of the element-wise difference from the goal state (ARC). Despite differing operationalizations, all instantiate the same conceptual quantity: disorder of the environmental state relative to a task-defined goal. Scores remain incommensurable across different entropy operationalizations; $I_{cd}$ is properly understood as a family of measures indexed by $S(E)$, analogous to how psychometric subtests produce scores meaningful within but not across subtests. When an agent operates across multiple contexts, $\eta$ is computed as a single ratio of cumulative entropy change to cumulative work across all episodes, not as a mean of per-context efficiencies.
+
+Although the notation echoes thermodynamics (entropy, work, efficiency), the relationship is analogical: $S(E)$ is Shannon entropy, not Boltzmann entropy, and $W$ is action cost, not physical work. Landauer's principle~\cite{landauer1961irreversibility} and Jarzynski's equality~\cite{jarzynski1997nonequilibrium} provide conceptual motivation, but $I_{cd}$ is defined entirely within information theory.
+
+\subsection{The Crystal Problem}
+\label{sec:crystal}
+
+The efficiency $\eta$ alone is insufficient to distinguish intelligence from spontaneous order. Three systems illustrate the problem. Crystal nucleation achieves $\eta \gg 0$ in a single chemical context (specific concentration, temperature, pressure). Turing patterns~\cite{turing1952chemical} generate spatial order from homogeneity through fixed dynamical laws without adaptation. A thermostat reduces temperature entropy efficiently but only in its narrow domain. All three lack the hallmark of intelligence: \emph{flexible adaptation across diverse situations}. None can generalize beyond their single template.
+
+\subsection{Context-Diversity Constraint}
+\label{sec:context-diversity}
+
+To exclude spontaneous order, we introduce a second term that measures the breadth of contexts in which the agent operates.
+
+\paragraph{Context.} A \emph{context} $c \in \mathcal{C}$ is a discrete label identifying the environment configuration (task structure, parameters, initial conditions). Granularity is a design choice: too coarse collapses distinct tasks into one context, yielding $H(C) \to 0$; too fine assigns each episode its own label, saturating $H(C)$ at $\ln n$ for all agents and eliminating discriminatory power.
+
+\paragraph{Labeling algorithm.} We assign context labels as equivalence classes over configurations that affect the optimal policy: episodes sharing the same environment class and configuration name receive the same label; episodes differing only in random seed share a label. Formally: $c = (\texttt{env\_class}, \texttt{config\_name})$. This labeling requires identifying which configuration parameters affect the optimal policy, a judgment that is straightforward for parameterized benchmarks but becomes non-trivial in open-ended domains (see Limitation~4). For our experiments (Section~\ref{sec:experiments}), this yields 3 contexts for Coupled Regulation (e.g., \texttt{(CoupledReg, weak)}) and 10 for the sliding puzzle (varying grid width and scramble depth).
+
+\paragraph{Partition sensitivity.} Under partition refinement from $|\mathcal{C}|$ to $|\mathcal{C}'|$ categories, $H(C)$ increases, potentially altering agent rankings. The following bound constrains when reversals can occur.
+
+\begin{proposition}[Ranking-reversal bound]
+\label{prop:reversal}
+Let agents $A, B$ satisfy $I_{cd}(A) > I_{cd}(B) > 0$ under partition $\mathcal{C}$. Under a refinement $\mathcal{C}'$ with $|\mathcal{C}'| > |\mathcal{C}|$, a ranking reversal $I_{cd}'(B) > I_{cd}'(A)$ requires:
+\[
+\frac{\eta_A}{\eta_B} < \frac{H'(C_B)}{H'(C_A)} \leq \frac{\ln|\mathcal{C}'|}{H(C_A)}
+\]
+where $H'$ denotes entropy under the refined partition and $H(C_A)$ is agent $A$'s context entropy under the original partition. When both agents operate uniformly ($H(C) = \ln|\mathcal{C}|$), this simplifies to $\ln|\mathcal{C}'|/\ln|\mathcal{C}|$.
+\end{proposition}
+\begin{proof}
+$I_{cd}'(A) < I_{cd}'(B)$ requires $\eta_A / \eta_B < H'(C_B) / H'(C_A)$. Since $H'(C_B) \leq \ln|\mathcal{C}'|$ and refinement cannot decrease entropy ($H'(C_A) \geq H(C_A)$), we get $H'(C_B)/H'(C_A) \leq \ln|\mathcal{C}'|/H(C_A)$. Agents with large efficiency gaps and broad coverage are robust to refinement.
+\end{proof}
+
+\subsection{The Full Measure}
+\label{sec:full-measure}
+
+Let $p(c)$ denote the empirical distribution of contexts during evaluation: the fraction of the agent's operational time spent in context $c$. The \emph{context diversity} is the Shannon entropy of this distribution:
+\begin{equation}
+H(C) = -\sum_{c \in \mathcal{C}} p(c) \ln p(c)
+\end{equation}
+$H(C) = 0$ when the agent operates in a single context. Combining efficiency (Section~\ref{sec:definitions}) with context diversity, we define our measure of pragmatic intelligence as:
+\begin{equation}
+I_{cd} = \frac{-\Delta S}{W} \times H(C) = \eta \times H(C)
+\label{eq:icd}
+\end{equation}
+
+The product form is motivated by two requirements:
+\begin{enumerate}
+\item \textbf{Zero-out property.} If $H(C) = 0$ (single context), then $I_{cd} = 0$ regardless of efficiency. This eliminates crystals, thermostats, and Turing patterns from scoring as intelligent.
+\item \textbf{Monotonicity.} Both higher efficiency $\eta$ and broader context diversity $H(C)$ independently increase $I_{cd}$. An agent that improves on either dimension increases its intelligence score.
+\end{enumerate}
+
+The measure is \emph{not} proposed as an objective to maximize (though one could design agents that do). Rather, $I_{cd}$ is a measuring stick: a substrate-independent way to quantify the intelligence exhibited by any system, regardless of its internal architecture or learning algorithm.
+
+\subsection{Properties}
+\label{sec:properties}
+
+We establish several properties of $I_{cd}$. Observation~1 is deliberately elementary; the central formal contribution is the axiomatic characterization (Proposition~2), which shows that the product form is uniquely determined by natural scaling requirements.
+
+\begin{observation}[Non-triviality]
+If an agent operates in a single context, $I_{cd} = 0$. \emph{(Immediate: $p(c_0){=}1$ gives $H(C){=}0$.)}
+\end{observation}
+
+\begin{proposition}[Axiomatic characterization]
+Let $f: \mathbb{R}_{\geq 0}^2 \to \mathbb{R}_{\geq 0}$ be a continuous combination function satisfying:
+\emph{(A1)} $f(\lambda\eta, H) = \lambda \cdot f(\eta, H)$ for all $\lambda > 0$ (scale covariance in efficiency),
+\emph{(A2)} $f(\eta, \mu H) = \mu \cdot f(\eta, H)$ for all $\mu > 0$ (scale covariance in diversity),
+\emph{(A3)} $f(1, 1) = 1$ (normalization).
+Then $f(\eta, H) = \eta \cdot H$ is the unique solution.
+\end{proposition}
+\begin{proof}
+From (A1) with $\eta = 1$: $f(\lambda, H) = \lambda \cdot f(1, H)$, so $f(\eta, H) = \eta \cdot g(H)$ where $g(H) := f(1, H)$. From (A2): $\eta \cdot g(\mu H) = \mu \cdot \eta \cdot g(H)$, giving $g(\mu H) = \mu \cdot g(H)$, i.e.\ positive homogeneity of degree~1. By (A3): $g(1) = f(1,1) = 1$, so $g(H) = H$. Therefore $f(\eta, H) = \eta \cdot H$.
+\end{proof}
+
+The derivation instantiates known functional equation results from the Acz\'{e}l tradition~\cite{aczel1966lectures}; the contribution is not the proof technique but the identification of axioms (A1)--(A3) as appropriate design requirements for intelligence measurement.
+
+Axioms (A1)--(A2) express measurement scale consistency: doubling efficiency (or diversity) doubles the intelligence score. The zero-out property follows automatically by continuity at $\mu = 0$. Relaxing (A2) while keeping (A1) yields $f(\eta, H) = \eta \cdot g(H)$ for arbitrary continuous $g$ with $g(1) = 1$, admitting $\eta \cdot \log(1+H)$, $\eta \cdot H^2$, etc. The bilateral symmetry of (A1)--(A2) is thus doing substantial work; we justify it by the principle that efficiency and diversity should contribute on equal footing: neither dimension should dominate the measure's scaling behavior. Without scale covariance entirely, the residual freedom is the Cobb--Douglas family $\eta^a \cdot H^b$ for $a, b > 0$; our choice $a = b = 1$ is the simplest member~\cite{krantz1971foundations}. The product form's ordinal predictions are robust to reasonable exponent choices (Section~\ref{sec:experiments} shows 8 of 9 exponent configurations preserve ordinal rankings under $a, b \in \{0.5, 1.0, 1.5\}$), supporting the axioms as a reasonable default rather than the only viable option.
+
+\begin{remark}[Substrate independence]
+By construction, $I_{cd}$ depends only on observable quantities: environmental state distributions (for $\Delta S$), action costs (for $W$), and context labels (for $H(C)$). No internal-architecture term appears. Two agents producing identical environmental effects receive identical scores, ensuring substrate independence. This is a design property, not a derived result; any purely behavioral measure (accuracy, F1, etc.) is equally substrate-independent by definition.
+\end{remark}
+
+\begin{remark}[Negative $I_{cd}$]
+Agents that increase environmental entropy receive $I_{cd} < 0$, interpreted as net disorder-increasing behavior over the evaluation window. Since $I_{cd}$ is computed over complete episodes, transient entropy increases (e.g., exploration, escaping local optima) are subsumed by the net $\Delta S$; an agent that explores before converging can still achieve positive $I_{cd}$ if the net effect is entropy reduction. Observation~1 holds for negative values since its proof depends only on $H(C) = 0$ forcing $I_{cd} = 0$.
+\end{remark}
+
+\subsection{Philosophical Commitments}
+\label{sec:philosophy}
+
+$I_{cd}$ formalizes a specific, measurable component of intelligence: the capacity for \emph{adaptive environmental control} across diverse situations. This is not the whole of intelligence, nor is it claimed to be. It is a behavioral operationalization in a functionalist spirit~\cite{putnam1967nature,varela1991embodied}, deliberately defined over observable input-output behavior rather than internal substrate or representational format. High $I_{cd}$ indicates demonstrated pragmatic competence; it does not establish understanding, creativity, or consciousness.
+
+\paragraph{Provenance agnosticism.} Dennett~\cite{dennett2017bacteria} distinguishes \emph{competence without comprehension} from \emph{competence from comprehension}. A hand-coded heuristic exemplifies the latter: its competence derives from the programmer's comprehension. $I_{cd}$ attributes demonstrated capability regardless of provenance, just as a thermometer measures temperature regardless of whether the object heated itself. Provenance is invisible from observational data alone~\cite{searle1980minds}.
+
+\paragraph{The Blockhead objection.} Block's Blockhead thought experiment~\cite{block1981troubles} posits a giant lookup table that reproduces any finite behavioral repertoire without intelligence. In principle, $I_{cd}$ would score such a system highly. In practice, achieving high $I_{cd}$ across diverse contexts requires solving a compression problem~\cite{schmidhuber2009driven}: mappings grow combinatorially with $|\mathcal{C}|$, so maintaining high $\eta$ broadly requires a compressed model of environment dynamics. The chain rule for Kolmogorov complexity supports this: producing $N$ independent structured outputs of complexity $k$ requires description length $\geq Nk - O(N \log N)$, and the information non-increase theorem ensures that no short program can generate complex structured outputs without encoding the requisite information~\cite{li2019introduction}. However, no published result connects $I_{cd}$ to policy complexity. Proving that high $I_{cd}$ implies high policy complexity remains an open problem and the most significant theoretical limitation, inherent to any purely behavioral measure. At Marr's~\cite{marr1982vision} computational level, the distinction dissolves; process-based measures~\cite{chollet2019measure,wang2006rigid} at the algorithmic level provide a complementary perspective.
+
+\paragraph{Scope as feature.} The zero-out property (Observation~1) entails that single-context mastery scores zero. $I_{cd}$ thus measures \emph{general pragmatic} intelligence: efficient entropy reduction across diverse situations. Domain-specific expertise is measurable by $\eta$ alone. In active inference terminology~\cite{parr2022active,millidge2021whence}, $I_{cd}$ captures the \emph{pragmatic} component (reshaping the environment) while remaining silent on the \emph{epistemic} component (exploring to reduce uncertainty). Complementary dimensions such as Bach's model-making capacity~\cite{bach2009principles} capture the cognitive \emph{how} behind the behavioral \emph{what}. $I_{cd}$ does not distinguish planned from accidental entropy reduction within a single episode; averaging across episodes and seeds provides a statistical remedy.
+
+% =============================================================================
+\section{Related Work}
+\label{sec:related}
+% =============================================================================
+
+We position $I_{cd}$ against five families of related work, highlighting where it agrees, diverges, and complements existing frameworks.
+
+\subsection{Universal Intelligence}
+\label{sec:universal-intelligence}
+
+Legg and Hutter~\cite{legg2007universal} define $\Upsilon(\pi) = \sum_{\mu \in E} 2^{-K(\mu)} V_\mu^\pi$, summing performance across all computable environments weighted by Kolmogorov complexity. High $\Upsilon$ already implies broad competence (the complexity-weighted sum rewards performance across many environments), so $H(C)$ captures a related desideratum at the observational level. The key differences are: (1)~computability ($I_{cd}$ uses Shannon entropy, not Kolmogorov complexity); (2)~efficiency (two agents with identical $\Upsilon(\pi)$ but different action costs $W_A \ll W_B$ are equivalent under Legg--Hutter but distinguished by $I_{cd}$); and (3)~operationalization ($I_{cd}$ is computed from finite observational data rather than over the space of all computable environments).
+
+\subsection{Universal Psychometrics}
+\label{sec:psychometrics}
+
+Hern\'{a}ndez-Orallo's universal psychometrics~\cite{hernandezorallo2000beyond,hernandezorallo2010measuring,hernandezorallo2017measure} grounds task difficulty in Levin's $Kt$ complexity (a computable, time-bounded approximation of Kolmogorov complexity). His generality metric~\cite{hernandezorallo2021generality} disentangles capability from generality, conceptually adjacent to $H(C)$ but defined over a difficulty axis. The two diverge when coverage is broad but shallow: high $H(C)$ but low $\eta$ yields low $I_{cd}$, as the product form penalizes breadth without efficiency.
+
+\subsection{Skill-Acquisition Efficiency}
+\label{sec:chollet}
+
+Chollet~\cite{chollet2019measure} defines intelligence as skill-acquisition efficiency. A slow learner mastering diverse contexts registers low Chollet-intelligence but potentially high $I_{cd}$; a rapid few-shot learner restricted to narrow domains registers high Chollet-intelligence but low $I_{cd}$ due to minimal $H(C)$. Chollet's formalism requires knowledge of the agent's prior state; $I_{cd}$ is strictly black-box but cannot distinguish memorized from genuinely generalized behavior.
+
+\subsection{The Free Energy Principle}
+\label{sec:fep}
+
+Friston's Free Energy Principle~\cite{friston2010free,friston2015active} applies to all persistent systems including crystals~\cite{friston2012dark}; intelligence under the FEP requires additional process-theoretic structure~\cite{parr2022active}. EFE's pragmatic component ($D_{\text{KL}}[q(o\mid\pi) \| \tilde{p}(o)]$) operates over model-internal beliefs, whereas $\eta$ is computed over observed environmental states; convergence requires model accuracy assumptions not established in general~\cite{millidge2021whence}. $I_{cd}$ differs in three respects: (1)~\emph{work normalization}: EFE contains no action-cost term; (2)~\emph{no generative model}: $I_{cd}$ requires only observational data~\cite{brooks1991intelligence}; (3)~\emph{context diversity}: $H(C)$ addresses the crystal problem from observational data alone.
+
+\subsection{Other Frameworks}
+\label{sec:other}
+
+Empowerment~\cite{salge2014empowerment,hayashi2025empowerment} measures channel capacity (potential influence) and requires interventional access, whereas $I_{cd}$ measures actual entropy reduction from observational data. Silver et al.~\cite{silver2021reward} argue ``reward is enough''; $I_{cd}$ serves as a \emph{measuring stick} rather than an objective. Perrier~\cite{perrier2025watts} treats efficiency as a separate property; we treat it as a \emph{component} ($\eta$). Kolchinsky and Wolpert~\cite{kolchinsky2018semantic} formalized a benefit/cost ratio for semantic information, sharing $I_{cd}$'s emphasis on environmental outcomes. Oswald et al.~\cite{oswald2025arrow} prove Arrow-style impossibility results for multi-environment intelligence measures; $I_{cd}$ operates within a fixed entropy operationalization $S(E)$ and a fixed context partition $\mathcal{C}$ per evaluation, forgoing the cross-environment aggregation that triggers the impossibility conditions. This means $I_{cd}$ is properly understood as a family of measures: scores are comparable within a given $(S(E), \mathcal{C})$ instantiation but not across them, and no single instantiation yields a universal ranking. We note a connection to perplexity-based evaluation: since perplexity $= \exp(H)$, language-model cross-entropy reduction maps onto $\eta$ when $S(E)$ is instantiated as token-level entropy, but standard perplexity metrics have no analog of the context-diversity term $H(C)$.
+
+\subsection{AGI Definitions}
+\label{sec:agi-defs}
+
+Bennett~\cite{bennett2025agi} defines intelligence as ``adaptation with limited resources''; his OPWP theorem's preference for weak (general) policies resonates with $H(C)$. Wang~\cite{wang2006rigid} characterizes the \emph{process} of intelligence (coping with uncertainty and scarcity); $I_{cd}$ characterizes the \emph{outcome}. Goertzel's cognitive synergy thesis~\cite{goertzel2009cognitive} emphasizes breadth from interacting components; $I_{cd}$'s $H(C)$ rewards breadth but cannot distinguish integrated architectures from bags of independent specialists, a consequence of substrate independence. Morris et al.'s Levels of AGI~\cite{morris2023levels} propose a performance $\times$ generality taxonomy; $I_{cd}$ maps onto this with continuous rather than discrete scores. Ng~\cite{ng2025intelligence} emphasizes breadth; we add efficiency.
+
+% =============================================================================
+\section{Computational Demonstration}
+\label{sec:experiments}
+% =============================================================================
+
+We demonstrate $I_{cd}$ through four experiments ordered by increasing scope: Coupled Regulation isolates $\eta$ with $H(C)$ held constant; the Sliding Puzzle requires both factors to discriminate specialists from generalists; IPC 2023 confirms the pattern on archival competition data with provably positive $\eta$; ARC-AGI extends to LLM solvers under compression-based $S(E)$.
+
+\subsection{Coupled Regulation}
+\label{sec:coupled-regulation}
+
+\paragraph{Setup.} $N$ continuous variables $x_1, \ldots, x_N$ coupled through an interaction matrix $A$: adjusting $x_k$ by $\pm\delta$ also shifts each $x_j$ by $A_{jk}\delta$. The agent observes current values and targets (initialized uniformly in $[-2, 2]$ with noise $\pm 1.5$) but not the coupling matrix. Environmental entropy is Shannon entropy over discretized deviations $|x_i - t_i|$, binned at thresholds $(0.1, 0.3, 0.6, 1.0)$ into five categories. Episodes run for 300 steps; each adjustment costs 1.0. Three contexts: (1)~Weak: $N{=}4$, $\|A\|_\infty \approx 0.1$; (2)~Moderate: $N{=}6$, $\|A\|_\infty \approx 0.3$; (3)~Strong: $N{=}8$, $\|A\|_\infty \approx 0.5$. The heuristic agent greedily adjusts the variable with largest deviation toward its target. Code is available at \url{https://github.com/dariocazzani/intelligence-entropy}.
+
+\paragraph{Agents.} We evaluate four agent types; critically, \emph{none are trained to maximize $I_{cd}$}. (1)~\emph{Random}: uniform random actions (baseline). (2)~\emph{Heuristic}: hand-coded greedy deviation reduction with no learning. (3)~\emph{Task-reward}: PPO~\cite{schulman2017proximal} with $r_t = -\Delta S_t$ (myopic entropy reduction, no work or context awareness). (4)~\emph{Curiosity}: PPO with prediction-error reward $r_t = \|\hat{s}_{t+1} - s_{t+1}\|^2$~\cite{pathak2017curiosity}.\footnote{Both PPO agents: 2-layer MLP, 64 hidden units, Tanh, lr=$3{\times}10^{-4}$, $\gamma{=}0.99$, clip $\epsilon{=}0.2$, 4 PPO epochs. Curiosity forward model: 2-layer MLP (64 hidden, ReLU), predicting next observation from (state, action). Training: 1000 episodes. Evaluation: 10 episodes per configuration, 50 seeds.}
+
+\paragraph{Results.} We evaluate each agent across all three contexts (10 episodes per configuration, 50 random seeds). Figure~\ref{fig:coupled-regulation} shows mean $I_{cd} \pm$ std ($\times 10^{-3}$). Task-reward ($3.79 \pm 0.38$) and Curiosity ($3.70 \pm 0.39$) outperform the Heuristic ($2.81 \pm 0.26$), all well above Random ($0.86 \pm 0.43$). Wilcoxon signed-rank tests on paired seeds confirm that Curiosity $>$ Heuristic and Heuristic $>$ Random are highly significant ($p < 0.001$), while the gap between Task-reward and Curiosity is not ($p > 0.05$; overlapping confidence intervals).
+
+The pattern is interpretable: learned agents dominate because hidden coupling must be discovered through interaction. Curiosity-driven probing is productive: exploratory perturbations reveal coupling structure, and subsequent entropy reduction compensates for the exploration cost. $I_{cd}$ (Eq.~\ref{eq:icd}) does not penalize exploration \emph{per se}, only exploration that fails to produce downstream entropy reduction. Since all agents see the same three contexts uniformly, $H(C) = \ln 3 \approx 1.10$ for all; within this environment the ranking is driven entirely by efficiency $\eta$. The complementary role of $H(C)$ is demonstrated in the IPC (Section~\ref{sec:ipc}) and ARC (Section~\ref{sec:arc}) evaluations, where context diversity varies naturally across solvers.
+
+\begin{figure}[t]
+\centering
+\input{figures/coupled_regulation_results.tex}
+\caption{Coupled Regulation: $I_{cd} \times 10^3$ (mean $\pm$ std, 50 seeds) for four agents. $H(C) = \ln 3$ is constant, so the ranking is driven entirely by $\eta$.}
+\label{fig:coupled-regulation}
+\end{figure}
+
+\paragraph{Robustness checks.} A variant with coupling-dependent costs $c(a_k) = 1 + \sum_{j \neq k} |A_{jk}|$ preserves all ordinal rankings, confirming that $W$ provides meaningful normalization. Varying $(a,b)$ in $\{0.5, 1.0, 1.5\}^2$ for the generalized Cobb--Douglas form $\eta^a \cdot H(C)^b$ also preserves rankings in 8 of 9 configurations ($\tau = 1.0$).
+
+\paragraph{Ablation: removing $H(C)$.} Table~\ref{tab:ablation} compares $I_{cd}$ vs.\ $I_{\text{ablated}} = \eta$ for specialist and generalist variants of the Task-reward agent. Specialist and generalist achieve comparable efficiency ($\eta = 3.30$ vs.\ $3.35 \times 10^{-3}$), yet the specialist operates in a single context ($H(C) = 0$) and correctly scores $I_{cd} = 0$. Under $I_{\text{ablated}} = \eta$ the specialist receives non-zero credit, precisely the crystal problem $H(C)$ is designed to solve.
+
+\begin{table}[t]
+\centering
+\caption{Ablation: removing $H(C)$. All values scaled $\times 10^3$. Without $H(C)$, the single-context specialist receives non-zero scores; with $H(C)$, it correctly scores zero despite comparable efficiency.}
+\label{tab:ablation}
+\input{tables/ablation.tex}
+\end{table}
+
+\subsection{Joint Factor Discrimination: Variable-Size Sliding Puzzle}
+\label{sec:sliding-puzzle}
+
+The preceding experiments hold $H(C) = \ln 3$ constant, so the ranking is driven entirely by $\eta$. To demonstrate that both factors do joint discriminatory work, we evaluate agents on variable-size sliding tile puzzles (grid widths $w = 2$ through $w = 5$) across 10 contexts varying grid size and scramble depth. Environmental entropy is Shannon entropy over the distribution of Manhattan displacement distances; each step costs $W = 1.0$ (representing the cognitive cost of a decision, regardless of whether the chosen slide is valid).
+
+We construct five variants of the same greedy Manhattan-distance heuristic, each restricted to a different subset of grid sizes. On allowed sizes the agent uses the heuristic; on disallowed sizes it selects random actions. This creates agents with identical algorithms but different competence ranges, isolating the effect of scope on $I_{cd}$.
+
+\begin{table}[t]
+\centering
+\caption{Variable-size sliding puzzle: six agents evaluated on 10 contexts (50 seeds). Values $\times 10^3$ except $H(C)$ and $k$. $k$ is the number of contexts with $\eta > 0$. Heuristic-Easy achieves the highest $\eta$ but only fourth-highest $I_{cd}$: the product form correctly values the generalist's broader $H(C)$. All adjacent pairs significant (Wilcoxon $p < 0.001$).}
+\label{tab:sliding-puzzle}
+\small
+\begin{tabular}{llrrrrr}
+\toprule
+Agent & Scope & $\eta$ & $H(C)$ & $I_{cd}$ & $k$ \\
+\midrule
+Heuristic-Full & $w{=}2{-}5$ & 0.781 & 2.30 & \textbf{1.795} & 10.0 \\
+Heuristic-Wide & $w{=}2{-}4$ & 0.763 & 1.94 & 1.483 & 7.0 \\
+Heuristic-Hard & $w{=}4{,}5$ & 0.702 & 1.94 & 1.355 & 7.0 \\
+Heuristic-Easy & $w{=}2{,}3$ & \textbf{0.793} & 1.38 & 1.094 & 4.0 \\
+Heuristic-Narrow & $w{=}2$ & 0.673 & 0.33 & 0.161 & 1.5 \\
+\midrule
+Random & --- & 0.126 & 0.07 & 0.010 & 0.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:sliding-puzzle} shows the results. The $\eta$ ranking disagrees with the $I_{cd}$ ranking: Heuristic-Easy achieves the highest per-context efficiency ($\eta = 0.793 \times 10^{-3}$, bolded) because it is only evaluated on easy contexts where the heuristic excels. Yet its $I_{cd}$ ranks fourth because the product form penalizes its limited context diversity ($H(C) = 1.38$ vs.\ $2.30$ for the full generalist). Conversely, Heuristic-Full has lower $\eta$ (averaged across harder puzzles) but the highest $I_{cd}$ because its broad competence ($k = 10$) yields the largest $H(C)$. This is exactly the specialist-generalist tradeoff that the product form captures: $\eta$ alone rewards narrow specialization, while $I_{cd} = \eta \times H(C)$ correctly values breadth of competence (Figure~\ref{fig:sliding-puzzle}).
+
+\begin{figure}[t]
+\centering
+\input{figures/sliding_puzzle_results.tex}
+\caption{Sliding Puzzle: each agent plotted by efficiency $\eta$ (vertical) and context diversity $H(C)$ (horizontal); dashed curves are iso-$I_{cd}$ contours. Heuristic-Easy (bold) achieves the highest $\eta$ but falls on a lower contour than Heuristic-Full, demonstrating that the product form values breadth of competence.}
+\label{fig:sliding-puzzle}
+\end{figure}
+
+\subsection{Classical Planning: IPC 2023 Learning Track}
+\label{sec:ipc}
+
+We evaluate eight planners from the IPC 2023 Learning Track~\cite{seipp2024ipc} on 900 problems across 10 domains (Blocksworld, Childsnack, Ferry, Floortile, Miconic, Rovers, Satellite, Sokoban, Spanner, Transport). This is a fully external benchmark where $\eta$ is provably positive: every solved problem has $S(E_\text{final}) = 0$ by construction (all goal predicates satisfied). We define $S(E)$ as the count of unsatisfied goal predicates, parsed from the PDDL problem specification; $W$ is the plan cost (equal to plan length for these unit-cost domains); and each planning domain is a distinct context.
+
+\begin{table}[t]
+\centering
+\caption{IPC 2023 Learning Track: 8 planners across 10 domains. S(E) = unsatisfied goal predicates. $\eta$ is provably positive for all planners (S(goal) = 0 by construction). Vanir achieves the highest $\eta$ but covers only 5 domains, illustrating the specialist-generalist tradeoff.}
+\label{tab:ipc}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Planner & $\eta$ & $H(C)$ & $I_{cd}$ & Solved & Total & Domains \\
+\midrule
+FDSS & 0.324 & 2.25 & \textbf{0.728} & 604 & 900 & 10 \\
+LAMA & 0.308 & 2.19 & 0.675 & 559 & 900 & 10 \\
+GOFAI & 0.279 & 2.24 & 0.627 & 560 & 900 & 10 \\
+Muninn & 0.296 & 2.11 & 0.625 & 228 & 900 & 9 \\
+Downward-SMAC & 0.275 & 2.23 & 0.611 & 548 & 900 & 10 \\
+HUZAR & 0.274 & 2.23 & 0.610 & 572 & 900 & 10 \\
+\midrule
+Vanir & \textbf{0.325} & 1.57 & 0.512 & 364 & 450 & 5 \\
+ASNets & 0.084 & 1.43 & 0.121 & 40 & 630 & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:ipc} shows the results. FDSS achieves the highest $I_{cd}$ (0.728) by combining strong efficiency ($\eta = 0.324$) with broad coverage (10 domains, 604 solved). Vanir illustrates the specialist-generalist tradeoff: its $\eta$ (0.325, bolded) is virtually identical to FDSS, but it covers only 5 domains ($H(C) = 1.57$ vs.\ $2.25$), so the product form ranks it seventh. Among the six generalist planners, FDSS leads because it produces shorter plans on average, not just because it solves more problems. GOFAI, the competition winner by coverage, ranks third in $I_{cd}$ because FDSS and LAMA are more efficient per goal predicate. Bootstrap resampling over domains (10{,}000 resamples) confirms that FDSS holds the top rank and ASNets the bottom; the middle-pack planners have overlapping 95\% CIs, consistent with their similar efficiency on shared domains. A systematic comparison of $I_{cd}$ rankings against IPC quality and agile scores remains future work.
+
+\subsection{ARC Evaluation: External Benchmark}
+\label{sec:arc}
+
+We evaluate solvers on the ARC-AGI training set~\cite{chollet2019measure} (400 tasks), an externally designed benchmark where solvers naturally achieve different context coverage. Each task defines an input-output grid pair; the ground-truth output is the environment's goal state. We define $S(E)$ as the lossless compressed length of the element-wise difference between prediction and ground truth (zlib, level 9): exact matches compress to near-minimum, incorrect predictions retain spatial complexity. $W$ is the number of differing cells (representing transformation effort rather than iterative action cost), and each task ID is a distinct context.
+
+We evaluate seven rule-based solvers and three LLM solvers of increasing capability: Claude Haiku 3.5, Claude Haiku 4.5, and Claude Sonnet 4. LLM solvers (temperature 0, deterministic) receive a structured prompt with all training examples for a task and produce a predicted output grid; responses are cached on disk.
+
+\begin{table}[t]
+\centering
+\caption{ARC evaluation: 7 rule-based and 3 LLM solvers. $S(E)$ is compressed length of the difference from ground truth (bytes). ``Tasks'' is the number attempted (non-null prediction).}
+\label{tab:arc}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Solver & $\eta$ & $H(C)$ & $I_{cd}$ & Tasks & Acc.\ (\%) \\
+\midrule
+Random & $-0.447$ & 5.99 & $-2.676$ & 400 & 0.0 \\
+Copy-input & 0.000 & 5.99 & 0.000 & 400 & 0.0 \\
+Most-common & 0.085 & 5.99 & 0.507 & 400 & 0.2 \\
+Color-map & 0.844 & 1.61 & 1.358 & 5 & 80.0 \\
+Geometric & \textbf{1.189} & 1.95 & \textbf{2.314} & 7 & 100.0 \\
+Tiling & 0.217 & 0.00 & 0.000 & 1 & 100.0 \\
+Border-fill & --- & 0.00 & --- & 0 & --- \\
+\midrule
+LLM Haiku 3.5 & 0.077 & 5.95 & 0.458 & 384 & 18.5 \\
+LLM Haiku 4.5 & 0.116 & 5.87 & 0.680 & 355 & 38.3 \\
+LLM Sonnet 4 & \textbf{0.123} & 5.78 & \textbf{0.710} & 324 & 35.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:arc} shows the results. Geometric achieves the highest $\eta$ (1.189): with 100\% accuracy on 7 geometric tasks, its predictions exactly match the ground truth (difference compresses to near-zero). Among the LLMs, $\eta$ is consistent with capability ordering: Sonnet~4 ($\eta = 0.123$) outperforms Haiku~4.5 ($0.116$) and Haiku~3.5 ($0.077$). Sonnet~4 achieves higher $\eta$ than Haiku~4.5 despite slightly lower accuracy (35.8\% vs.\ 38.3\%) because its incorrect predictions are closer to the ground truth, a distinction that binary accuracy misses. $I_{cd}$ rankings reflect both factors: Geometric leads on $\eta$ while LLMs lead on $H(C)$ (5.78--5.95 vs.\ 1.95). Narrow specialists (Color-map: 80\% accuracy on 5 tasks; Geometric: 100\% on 7) achieve high $\eta$ but low $H(C)$, illustrating the specialist-generalist tradeoff. Notably, Color-map's $I_{cd}$ (1.358) exceeds all three LLMs because its ${\approx}7\times$ efficiency advantage outweighs the LLMs' broader coverage (see Limitation~7). Tiling (100\% accuracy, 1 task, $H(C) = 0$, $I_{cd} = 0$) is the crystal problem by definition. Rankings are robust to compression algorithm choice: zlib (levels 1, 6, 9) and bz2 all produce identical orderings ($\tau = 1.0$); only lzma, which uses a fundamentally different algorithm, shows a moderate deviation ($\tau = 0.71$).\footnote{Border-fill attempts 0 tasks; $\eta$ and $I_{cd}$ are undefined and reported as ``---''.}
+
+\paragraph{Progressive isolation.} Coupled Regulation varies $\eta$ at constant $H(C)$; the sliding puzzle varies both factors jointly; IPC confirms the pattern on external data with provably positive $\eta$; ARC extends to compression-based $S(E)$ with $\eta$ consistent with LLM capability ordering.
+
+% =============================================================================
+\section{Discussion, Limitations, and Conclusion}
+\label{sec:discussion}
+% =============================================================================
+
+\paragraph{Limitations.} We are honest about what the measure does not capture:
+\begin{enumerate}
+\item \textbf{Domain-specific entropy definitions.} $S(E)$ is defined differently per domain; generalizing to continuous spaces or multi-agent settings requires domain-specific choices.
+\item \textbf{Product form axiomatically characterized, not uniquely derived.} Proposition~2 shows scale covariance and normalization force $\eta \times H(C)$, but the axioms are design choices; $\eta^a \cdot H^b$ remains viable if scale covariance is relaxed.
+\item \textbf{No learning rate or adaptive horizon.} $I_{cd}$ is a snapshot measure: it evaluates demonstrated competence but says nothing about acquisition. A memorizer and a few-shot learner receive the same score if behavior matches, a deliberate consequence of substrate independence (Remark~1) that excludes rapid skill acquisition~\cite{chollet2019measure}. Extending to $I_{cd}(t)$ over training time is a priority for future work.
+\item \textbf{Context partition dependence.} The labeling algorithm (Section~\ref{sec:context-diversity}) presupposes domain knowledge; two evaluators with different domain theories could obtain different rankings. In our experiments, partitions are canonical (IPC domains, ARC task IDs, parameterized grid sizes). Proposition~1 bounds ranking-reversal risk under refinement at $\ln|\mathcal{C}'|/H(C_A)$. An agglomerative Information Bottleneck~\cite{tishby1999information} applied to IPC data discovers 35 problem profiles that partially align with domain labels (AMI $= 0.33$ when evaluated at $k{=}10$ clusters); despite the mismatch, $I_{cd}$ rankings are stable (Kendall $\tau \geq 0.71$, $p < 0.015$ for $k \in \{5,\ldots,20\}$), with FDSS top-ranked and ASNets bottom-ranked throughout. Data-driven context selection remains future work.
+\item \textbf{Action costs only, not computational resources.} $W$ measures action cost in the environment, not computational cost to the agent; incorporating computational resources would require access to agent internals, conflicting with substrate independence.
+\item \textbf{$H(C)$ is a Shannon diversity index, not true diversity.} Shannon entropy underweights rare categories relative to $\exp(H)$~\cite{magurran2004measuring} and treats all contexts as equally dissimilar. Using $\exp(H(C))$ or incorporating inter-context similarity would address these issues but breaks the axiomatic characterization or requires domain-specific distance functions.
+\item \textbf{Demonstrated vs.\ potential competence.} A narrow solver can outscore a broadly capable agent (e.g., Color-map exceeds all LLMs on ARC) because $I_{cd}$ measures \emph{demonstrated} competence, not latent capability. For contexts where breadth is the primary desideratum, analysts may prefer $\eta^a \cdot H(C)^b$ with $b > 1$ or filter by a minimum coverage threshold.
+\item \textbf{Scope excludes creative and epistemic intelligence.} $I_{cd}$ measures entropy \emph{reduction}; creative intelligence that increases environmental entropy falls outside its scope. Creative and epistemic dimensions require complementary measures.
+\end{enumerate}
+
+\paragraph{Goodhart's Law.} $I_{cd}$ is a \emph{diagnostic}, not an objective~\cite{goodhart1984problems}; all agents are trained with non-$I_{cd}$ objectives and evaluated post hoc. The product form resists gaming (inflating $H(C)$ without $\eta$ yields low scores, and vice versa), but trivial actions across many contexts could still inflate $H(C)$.
+
+\paragraph{Conclusion.} We proposed $I_{cd} = (-\Delta S / W) \times H(C)$, a substrate-independent family of intelligence measures based on efficient entropy reduction across diverse contexts. The context-diversity constraint zeros single-context scores, addressing the crystal problem. Four evaluations demonstrate the framework: coupled regulation confirms $\eta$ rankings ($p < 0.001$), sliding puzzles demonstrate joint factor discrimination, IPC planning confirms the specialist-generalist tradeoff with provably positive $\eta$, and ARC shows $\eta$ consistent with LLM capability ordering. An Information Bottleneck analysis confirms ranking robustness to data-driven context selection ($\tau > 0.7$). Extension to continuous spaces and automated context selection~\cite{tishby1999information,wang2006rigid} remain future work.
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

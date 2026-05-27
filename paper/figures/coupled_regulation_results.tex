@@ -1,0 +1,43 @@
+% Panel: Coupled Regulation I_cd ranking (dot plot)
+
+% Agent colors (Okabe-Ito colorblind-safe palette)
+\definecolor{randomcolor}{RGB}{0,114,178}
+\definecolor{heuristiccolor}{RGB}{230,159,0}
+\definecolor{curiositycolor}{RGB}{0,158,115}
+\definecolor{rewardcolor}{RGB}{213,94,0}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=3.5cm,
+    xlabel={$I_{cd} \times 10^3$},
+    xlabel style={font=\small},
+    ymin=-0.6, ymax=3.6,
+    ytick={0,1,2,3},
+    yticklabels={Task-rew., Curiosity, Heuristic, Random},
+    yticklabel style={font=\small},
+    xticklabel style={font=\footnotesize},
+    xmin=-0.3, xmax=4.8,
+    every axis plot/.append style={only marks, mark=*, mark size=2.5pt},
+    clip=false,
+]
+\draw[gray, dashed, thin] (axis cs:0,-0.6) -- (axis cs:0,3.6);
+% Random
+\addplot[color=randomcolor, error bars/.cd, x dir=both, x explicit]
+    coordinates {(0.86, 3) +- (0.43, 0)};
+\node[anchor=west, font=\scriptsize] at (axis cs:1.32, 3) {0.86};
+% Heuristic
+\addplot[color=heuristiccolor, error bars/.cd, x dir=both, x explicit]
+    coordinates {(2.81, 2) +- (0.26, 0)};
+\node[anchor=west, font=\scriptsize] at (axis cs:3.10, 2) {2.81};
+% Curiosity
+\addplot[color=curiositycolor, error bars/.cd, x dir=both, x explicit]
+    coordinates {(3.70, 1) +- (0.39, 0)};
+\node[anchor=west, font=\scriptsize] at (axis cs:4.12, 1) {3.70};
+% Task-reward
+\addplot[color=rewardcolor, error bars/.cd, x dir=both, x explicit]
+    coordinates {(3.79, 0) +- (0.38, 0)};
+\node[anchor=east, font=\scriptsize] at (axis cs:3.38, 0) {3.79};
+
+\end{axis}
+\end{tikzpicture}

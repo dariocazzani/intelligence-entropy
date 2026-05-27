@@ -1,0 +1,29 @@
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+.pytest_cache/
+.venv/
+*.egg
+.DS_Store
+
+# Experiment outputs
+experiments/results/
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.pdf
+paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls
+texput.log
+
+# IPC data (too large for git, see README)
+data/ipc/
+
+# LLM response cache
+.cache/

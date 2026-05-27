@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "intelligence-entropy"
+version = "0.1.0"
+description = "I_cd: A substrate-independent measure of intelligence"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "torch",
+    "matplotlib",
+    "stable-baselines3>=2.0",
+    "gymnasium>=0.29",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "pre-commit", "mypy", "ruff"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ie"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ie"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "torch.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "scipy.*"
+ignore_missing_imports = true
+follow_untyped_imports = true
+
+
+[dependency-groups]
+dev = [
+    "scipy>=1.17.1",
+]
