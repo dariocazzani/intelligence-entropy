@@ -1,5 +1,11 @@
 # intelligence-entropy
 
+[![CI](https://github.com/dariocazzani/intelligence-entropy/actions/workflows/ci.yml/badge.svg)](https://github.com/dariocazzani/intelligence-entropy/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![AGI-26](https://img.shields.io/badge/AGI--26-accepted-brightgreen.svg)](https://agi-conf.org/)
+[![Springer LNAI](https://img.shields.io/badge/Springer-LNAI-blue.svg)](https://www.springer.com/series/1244)
+
 Pragmatic intelligence as efficient environmental entropy reduction: implementation and evaluation of I_cd = (-ΔS/W) × H(C).
 
 ## Paper
