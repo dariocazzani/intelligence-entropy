@@ -16,11 +16,12 @@ paper/*.bbl
 paper/*.blg
 paper/*.log
 paper/*.out
-paper/*.pdf
 paper/*.synctex.gz
 paper/*.fdb_latexmk
 paper/*.fls
 texput.log
+# Keep the compiled paper PDF
+!paper/main.pdf
 
 # IPC data (too large for git, see README)
 data/ipc/
