@@ -22,7 +22,7 @@
 \title{Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence}
 \titlerunning{Efficient Entropy Reduction as Pragmatic Intelligence Measure}
 
-\author{Dario Cazzani\inst{1}}
+\author{Dario Cazzani\inst{1}\orcidID{0009-0005-3610-7277}}
 \authorrunning{D. Cazzani}
 \institute{Cisco Systems Inc. \email{dcazzani@cisco.com}}
 
@@ -375,16 +375,21 @@ Table~\ref{tab:arc} shows the results. Geometric achieves the highest $\eta$ (1.
 \item \textbf{Domain-specific entropy definitions.} $S(E)$ is defined differently per domain; generalizing to continuous spaces or multi-agent settings requires domain-specific choices.
 \item \textbf{Product form axiomatically characterized, not uniquely derived.} Proposition~2 shows scale covariance and normalization force $\eta \times H(C)$, but the axioms are design choices; $\eta^a \cdot H^b$ remains viable if scale covariance is relaxed.
 \item \textbf{No learning rate or adaptive horizon.} $I_{cd}$ is a snapshot measure: it evaluates demonstrated competence but says nothing about acquisition. A memorizer and a few-shot learner receive the same score if behavior matches, a deliberate consequence of substrate independence (Remark~1) that excludes rapid skill acquisition~\cite{chollet2019measure}. Extending to $I_{cd}(t)$ over training time is a priority for future work.
-\item \textbf{Context partition dependence.} The labeling algorithm (Section~\ref{sec:context-diversity}) presupposes domain knowledge; two evaluators with different domain theories could obtain different rankings. In our experiments, partitions are canonical (IPC domains, ARC task IDs, parameterized grid sizes). Proposition~1 bounds ranking-reversal risk under refinement at $\ln|\mathcal{C}'|/H(C_A)$. An agglomerative Information Bottleneck~\cite{tishby1999information} applied to IPC data discovers 35 problem profiles that partially align with domain labels (AMI $= 0.33$ when evaluated at $k{=}10$ clusters); despite the mismatch, $I_{cd}$ rankings are stable (Kendall $\tau \geq 0.71$, $p < 0.015$ for $k \in \{5,\ldots,20\}$), with FDSS top-ranked and ASNets bottom-ranked throughout. Data-driven context selection remains future work.
+\item \textbf{Context partition dependence.} The labeling algorithm (Section~\ref{sec:context-diversity}) presupposes domain knowledge; two evaluators with different domain theories could obtain different rankings. In our experiments, partitions are canonical (IPC domains, ARC task IDs, parameterized grid sizes). Proposition~1 bounds ranking-reversal risk under refinement at $\ln|\mathcal{C}'|/H(C_A)$. An Information Bottleneck analysis~\cite{tishby1999information} on IPC data confirms ranking robustness (Kendall $\tau \geq 0.71$, $p < 0.015$ for $k \in \{5,\ldots,20\}$). Data-driven context selection remains future work.
 \item \textbf{Action costs only, not computational resources.} $W$ measures action cost in the environment, not computational cost to the agent; incorporating computational resources would require access to agent internals, conflicting with substrate independence.
 \item \textbf{$H(C)$ is a Shannon diversity index, not true diversity.} Shannon entropy underweights rare categories relative to $\exp(H)$~\cite{magurran2004measuring} and treats all contexts as equally dissimilar. Using $\exp(H(C))$ or incorporating inter-context similarity would address these issues but breaks the axiomatic characterization or requires domain-specific distance functions.
 \item \textbf{Demonstrated vs.\ potential competence.} A narrow solver can outscore a broadly capable agent (e.g., Color-map exceeds all LLMs on ARC) because $I_{cd}$ measures \emph{demonstrated} competence, not latent capability. For contexts where breadth is the primary desideratum, analysts may prefer $\eta^a \cdot H(C)^b$ with $b > 1$ or filter by a minimum coverage threshold.
 \item \textbf{Scope excludes creative and epistemic intelligence.} $I_{cd}$ measures entropy \emph{reduction}; creative intelligence that increases environmental entropy falls outside its scope. Creative and epistemic dimensions require complementary measures.
 \end{enumerate}
 
-\paragraph{Goodhart's Law.} $I_{cd}$ is a \emph{diagnostic}, not an objective~\cite{goodhart1984problems}; all agents are trained with non-$I_{cd}$ objectives and evaluated post hoc. The product form resists gaming (inflating $H(C)$ without $\eta$ yields low scores, and vice versa), but trivial actions across many contexts could still inflate $H(C)$.
+\paragraph{Goodhart's Law.} $I_{cd}$ is a \emph{diagnostic}, not an objective~\cite{goodhart1984problems}; all agents are trained with non-$I_{cd}$ objectives and evaluated post hoc. The product form resists gaming (inflating $H(C)$ without $\eta$ yields low scores, and vice versa), but trivial actions across many contexts could still inflate~$H(C)$.
 
-\paragraph{Conclusion.} We proposed $I_{cd} = (-\Delta S / W) \times H(C)$, a substrate-independent family of intelligence measures based on efficient entropy reduction across diverse contexts. The context-diversity constraint zeros single-context scores, addressing the crystal problem. Four evaluations demonstrate the framework: coupled regulation confirms $\eta$ rankings ($p < 0.001$), sliding puzzles demonstrate joint factor discrimination, IPC planning confirms the specialist-generalist tradeoff with provably positive $\eta$, and ARC shows $\eta$ consistent with LLM capability ordering. An Information Bottleneck analysis confirms ranking robustness to data-driven context selection ($\tau > 0.7$). Extension to continuous spaces and automated context selection~\cite{tishby1999information,wang2006rigid} remain future work.
+\paragraph{Conclusion.} We proposed $I_{cd} = (-\Delta S / W) \times H(C)$, a substrate-independent intelligence measure based on efficient entropy reduction across diverse contexts. The context-diversity constraint zeros single-context scores, addressing the crystal problem. Four evaluations confirm: coupled regulation validates $\eta$ rankings ($p < 0.001$), sliding puzzles demonstrate joint factor discrimination, IPC planning confirms the specialist-generalist tradeoff with provably positive $\eta$, and ARC shows $\eta$ consistent with LLM capability ordering. Rankings are robust to data-driven context selection ($\tau > 0.7$). Extension to continuous spaces and automated context discovery~\cite{tishby1999information,wang2006rigid} remain future work.
+
+\begin{credits}
+\subsubsection{\discintname}
+The author has no competing interests to declare that are relevant to the content of this article.
+\end{credits}
 
 \bibliographystyle{splncs04}
 \bibliography{references}
