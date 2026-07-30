@@ -12,8 +12,9 @@ $$I_{cd} = \frac{-\Delta S}{W} \times H(C)$$
 
 ## Paper
 
-"Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence"
-Dario Cazzani (Cisco Systems). Published in Proceedings of AGI-26, Springer LNAI, July 2026. Link forthcoming.
+["Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence"](https://doi.org/10.1007/978-3-032-33010-9_10)
+
+Dario Cazzani (Cisco Systems). Published in *Artificial General Intelligence: 19th International Conference, AGI 2026, Proceedings, Part I*, Springer LNCS 16854, pp. 154–171, July 2026.
 
 ## Quick Start
 
@@ -45,12 +46,19 @@ For parallel multi-seed experiments: `--chunk N --num-chunks K` then `--merge` t
 
 ```bibtex
 @inproceedings{cazzani2026entropy,
-  title={Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence},
-  author={Cazzani, Dario},
-  booktitle={Proceedings of the 18th International Conference on Artificial General Intelligence (AGI-26)},
-  series={Lecture Notes in Artificial Intelligence},
-  publisher={Springer},
-  year={2026}
+  author    = {Cazzani, Dario},
+  editor    = {Iklé, Matthew and Franz, Arthur and Kemendo, Andrew and Lowy, Haley},
+  title     = {Efficient Entropy Reduction as a Substrate-Independent Measure of Pragmatic Intelligence},
+  booktitle = {Artificial General Intelligence},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {16854},
+  pages     = {154--171},
+  publisher = {Springer Nature Switzerland},
+  address   = {Cham},
+  year      = {2026},
+  doi       = {10.1007/978-3-032-33010-9_10},
+  isbn      = {978-3-032-33010-9},
+  url       = {https://doi.org/10.1007/978-3-032-33010-9_10}
 }
 ```
 
