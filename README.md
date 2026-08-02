@@ -20,13 +20,13 @@ Producing order is not enough: crystals, thermostats, and other fixed processes
 can reduce disorder within one narrow set of conditions. The proposed
 diagnostic therefore combines efficient action with breadth across contexts.
 
-$$
+```math
 I_{cd}
 =
 \underbrace{\frac{-\Delta S}{W}}_{\text{efficiency }\eta}
 \times
 \underbrace{H(C)}_{\text{context diversity}}
-$$
+```
 
 | Term | Meaning |
 |---|---|
