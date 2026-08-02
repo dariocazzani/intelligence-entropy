@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img">
+  <title>From environmental order to pragmatic intelligence</title>
+  <desc>A crystal illustrates why entropy reduction alone is insufficient. A specialist acts efficiently in a narrow scope, while a generalist combines strong efficiency with behavior across diverse contexts.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .heading { fill: #f8fafc; font-size: 32px; font-weight: 750; }
+      .label { fill: #f8fafc; font-size: 30px; font-weight: 700; }
+      .caption { fill: #cbd5e1; font-size: 28px; font-weight: 600; }
+      .panel { fill: #172033; stroke: #475569; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="520" rx="26" fill="#0d1424"/>
+  <text x="500" y="48" text-anchor="middle" class="heading">Order alone is not enough. Add efficiency and breadth.</text>
+
+  <rect x="30" y="76" width="300" height="332" rx="22" class="panel"/>
+  <text x="180" y="120" text-anchor="middle" class="label">Order alone</text>
+  <g fill="#64748b">
+    <circle cx="68" cy="188" r="11"/><circle cx="109" cy="169" r="11"/>
+    <circle cx="91" cy="229" r="11"/><circle cx="132" cy="209" r="11"/>
+    <circle cx="65" cy="273" r="11"/><circle cx="121" cy="263" r="11"/>
+    <circle cx="96" cy="310" r="11"/>
+  </g>
+  <path d="M 150 239 H 190" stroke="#94a3b8" stroke-width="4" marker-end="url(#arrow)"/>
+  <g fill="#a78bfa">
+    <circle cx="224" cy="180" r="11"/><circle cx="257" cy="180" r="11"/><circle cx="290" cy="180" r="11"/>
+    <circle cx="224" cy="216" r="11"/><circle cx="257" cy="216" r="11"/><circle cx="290" cy="216" r="11"/>
+    <circle cx="224" cy="252" r="11"/><circle cx="257" cy="252" r="11"/><circle cx="290" cy="252" r="11"/>
+    <circle cx="224" cy="288" r="11"/><circle cx="257" cy="288" r="11"/><circle cx="290" cy="288" r="11"/>
+  </g>
+  <text x="180" y="371" text-anchor="middle" class="caption">Order ≠ intelligence</text>
+
+  <rect x="350" y="76" width="300" height="332" rx="22" class="panel"/>
+  <text x="500" y="120" text-anchor="middle" class="label">Specialist</text>
+  <g stroke="#475569" stroke-width="3">
+    <rect x="406" y="163" width="54" height="54" rx="11" fill="#25324a"/>
+    <rect x="473" y="163" width="54" height="54" rx="11" fill="#f0ad38" stroke="#fbbf24"/>
+    <rect x="540" y="163" width="54" height="54" rx="11" fill="#25324a"/>
+    <rect x="406" y="237" width="54" height="54" rx="11" fill="#25324a"/>
+    <rect x="473" y="237" width="54" height="54" rx="11" fill="#f0ad38" stroke="#fbbf24"/>
+    <rect x="540" y="237" width="54" height="54" rx="11" fill="#25324a"/>
+  </g>
+  <g fill="none" stroke="#0d1424" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 485 188 L 498 201 L 516 178"/>
+    <path d="M 485 262 L 498 275 L 516 252"/>
+  </g>
+  <text x="500" y="371" text-anchor="middle" class="caption">A few contexts</text>
+
+  <rect x="670" y="76" width="300" height="332" rx="22" class="panel"/>
+  <text x="820" y="120" text-anchor="middle" class="label">Generalist</text>
+  <g stroke-width="3">
+    <circle cx="750" cy="190" r="27" fill="#56b4e9" stroke="#7dd3fc"/>
+    <rect x="793" y="163" width="54" height="54" rx="11" fill="#26b98a" stroke="#6ee7b7"/>
+    <path d="M 890 160 L 921 215 L 859 215 z" fill="#e8793b" stroke="#fdba74"/>
+    <path d="M 723 268 L 750 241 L 777 268 L 750 295 z" fill="#d88bb6" stroke="#f9a8d4"/>
+    <polygon points="820,239 852,263 840,301 800,301 788,263" fill="#f0ad38" stroke="#fde68a"/>
+    <rect x="863" y="241" width="54" height="54" rx="27" fill="#7dd3fc" stroke="#bae6fd"/>
+  </g>
+  <g fill="none" stroke="#0d1424" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 737 190 L 748 201 L 765 180"/><path d="M 805 190 L 816 201 L 833 180"/>
+    <path d="M 877 190 L 888 201 L 905 180"/><path d="M 737 268 L 748 279 L 765 258"/>
+    <path d="M 807 268 L 818 279 L 835 258"/><path d="M 877 268 L 888 279 L 905 258"/>
+  </g>
+  <text x="820" y="371" text-anchor="middle" class="caption">Many contexts</text>
+
+  <rect x="120" y="435" width="760" height="62" rx="18" fill="#12324a" stroke="#38bdf8" stroke-width="2"/>
+  <text x="500" y="476" text-anchor="middle" fill="#e0f2fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="30" font-weight="750">The measure: efficiency × context diversity</text>
+</svg>
