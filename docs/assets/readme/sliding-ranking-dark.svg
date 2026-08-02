@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" role="img">
+  <title>Sliding-puzzle specialist and generalist ranking flip</title>
+  <desc>The Easy specialist has slightly greater efficiency, but the Full generalist has substantially greater context diversity and therefore a larger I cd score.</desc>
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .heading { fill: #f8fafc; font-size: 32px; font-weight: 750; }
+      .title { fill: #f8fafc; font-size: 30px; font-weight: 700; }
+      .scope { font-size: 24px; font-weight: 700; }
+      .metric { fill: #cbd5e1; font-size: 27px; font-weight: 650; }
+      .value { fill: #f8fafc; font-size: 27px; font-weight: 750; }
+      .rank { fill: #94a3b8; font-size: 25px; font-weight: 600; }
+      .card { fill: #172033; stroke: #475569; stroke-width: 2; }
+      .track { fill: #334155; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="650" rx="26" fill="#0d1424"/>
+  <text x="500" y="48" text-anchor="middle" class="heading">A small efficiency edge can lose to a large breadth gap.</text>
+
+  <rect x="40" y="78" width="920" height="224" rx="22" class="card"/>
+  <path d="M 82 101 L 103 138 L 61 138 z" fill="#f0ad38"/>
+  <text x="120" y="132" class="title">Easy specialist</text>
+  <text x="380" y="132" fill="#fbbf24" class="scope">grid widths 2–3</text>
+  <rect x="670" y="96" width="255" height="55" rx="16" fill="#3a2b13" stroke="#f0ad38" stroke-width="2"/>
+  <text x="797.5" y="133" text-anchor="middle" fill="#fde68a" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="27" font-weight="750">Score 1.094 × 10⁻³</text>
+
+  <text x="75" y="190" class="metric">Efficiency η</text>
+  <text x="440" y="190" text-anchor="end" class="value">0.793 × 10⁻³</text>
+  <rect x="75" y="207" width="365" height="20" rx="10" class="track"/>
+  <rect x="75" y="207" width="365" height="20" rx="10" fill="#f0ad38"/>
+  <text x="530" y="190" class="metric">Context diversity</text>
+  <text x="925" y="190" text-anchor="end" class="value">1.38 nats</text>
+  <rect x="530" y="207" width="395" height="20" rx="10" class="track"/>
+  <rect x="530" y="207" width="237" height="20" rx="10" fill="#fbbf24"/>
+  <text x="75" y="271" class="rank">efficiency rank #1</text>
+  <text x="925" y="271" text-anchor="end" fill="#fbbf24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="25" font-weight="750">combined rank #4</text>
+
+  <rect x="40" y="326" width="920" height="224" rx="22" class="card"/>
+  <circle cx="82" cy="123" r="23" fill="#56b4e9" transform="translate(0 248)"/>
+  <text x="120" y="380" class="title">Full generalist</text>
+  <text x="380" y="380" fill="#7dd3fc" class="scope">grid widths 2–5</text>
+  <rect x="670" y="344" width="255" height="55" rx="16" fill="#12324a" stroke="#56b4e9" stroke-width="2"/>
+  <text x="797.5" y="381" text-anchor="middle" fill="#bae6fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="27" font-weight="750">Score 1.795 × 10⁻³</text>
+
+  <text x="75" y="438" class="metric">Efficiency η</text>
+  <text x="440" y="438" text-anchor="end" class="value">0.781 × 10⁻³</text>
+  <rect x="75" y="455" width="365" height="20" rx="10" class="track"/>
+  <rect x="75" y="455" width="359" height="20" rx="10" fill="#56b4e9"/>
+  <text x="530" y="438" class="metric">Context diversity</text>
+  <text x="925" y="438" text-anchor="end" class="value">2.30 nats</text>
+  <rect x="530" y="455" width="395" height="20" rx="10" class="track"/>
+  <rect x="530" y="455" width="395" height="20" rx="10" fill="#7dd3fc"/>
+  <text x="75" y="519" class="rank">efficiency rank #2</text>
+  <text x="925" y="519" text-anchor="end" fill="#7dd3fc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="25" font-weight="750">combined rank #1</text>
+
+  <rect x="74" y="579" width="852" height="46" rx="14" fill="#12324a" stroke="#38bdf8" stroke-width="2"/>
+  <text x="500" y="610" text-anchor="middle" fill="#e0f2fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="750">Efficiency: Easy #1, Full #2  →  Combined: Full #1, Easy #4</text>
+</svg>
