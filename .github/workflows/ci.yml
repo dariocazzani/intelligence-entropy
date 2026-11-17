@@ -7,6 +7,21 @@ on:
     branches: [main]
 
 jobs:
+  walkthrough:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run --no-project --with cffconvert==2.0.0 cffconvert --validate
+      - run: uv run --no-project --with ruff ruff check notebooks/
+      - run: uv run --no-project --with ruff ruff format --check notebooks/
+      - run: >-
+          uv run --no-project --with nbconvert --with ipykernel
+          --with numpy --with matplotlib jupyter nbconvert
+          --to notebook --execute --ExecutePreprocessor.timeout=120
+          --output /tmp/measure_walkthrough.ipynb
+          notebooks/measure_walkthrough.ipynb
+
   lint:
     runs-on: ubuntu-latest
     steps:
