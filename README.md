@@ -67,6 +67,14 @@ diversity flips their ranking.
 
 ## Try the measure
 
+**[Open the walkthrough in Colab](https://colab.research.google.com/github/dariocazzani/intelligence-entropy/blob/main/notebooks/measure_walkthrough.ipynb)**
+to explore the specialist/generalist ranking and edit an illustrative evaluation.
+It uses NumPy and Matplotlib in the hosted runtime, with no local setup or agent
+training. [View the notebook](notebooks/measure_walkthrough.ipynb) or read
+[Applying the measure](docs/applying-the-measure.md) before using your own data.
+
+For a local checkout:
+
 Install the project and development dependencies:
 
 ```bash
@@ -109,6 +117,10 @@ AGI 2026*, Springer LNCS 16854, pp. 154–171.
 
 [Read the repository copy](paper/main.pdf) ·
 [View the source](paper/main.tex)
+
+Citation metadata is available in [CITATION.cff](CITATION.cff), with the
+conference paper as the preferred citation. See
+[Archiving releases](docs/archiving-releases.md) for software preservation.
 
 <details>
 <summary>Citation</summary>

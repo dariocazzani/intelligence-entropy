@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the conference paper below."
+type: software
+title: "Intelligence Entropy"
+authors:
+  - family-names: Cazzani
+    given-names: Dario
+    orcid: "https://orcid.org/0009-0005-3610-7277"
+repository-code: "https://github.com/dariocazzani/intelligence-entropy"
+url: "https://github.com/dariocazzani/intelligence-entropy"
+license: MIT
+abstract: >-
+  Code for evaluating demonstrated pragmatic competence through efficient
+  environmental entropy reduction across diverse contexts.
+keywords:
+  - intelligence measurement
+  - agent evaluation
+  - entropy reduction
+  - context diversity
+preferred-citation:
+  type: conference-paper
+  authors:
+    - family-names: Cazzani
+      given-names: Dario
+      orcid: "https://orcid.org/0009-0005-3610-7277"
+  title: >-
+    Efficient Entropy Reduction as a Substrate-Independent Measure of
+    Pragmatic Intelligence
+  collection-title: "Artificial General Intelligence"
+  collection-type: proceedings
+  editors:
+    - family-names: Iklé
+      given-names: Matthew
+    - family-names: Franz
+      given-names: Arthur
+    - family-names: Kemendo
+      given-names: Andrew
+    - family-names: Lowy
+      given-names: Haley
+  publisher:
+    name: "Springer Nature Switzerland"
+    city: Cham
+  volume: "16854"
+  start: "154"
+  end: "171"
+  year: 2026
+  date-published: 2026-07-29
+  isbn: "978-3-032-33010-9"
+  doi: "10.1007/978-3-032-33010-9_10"
+  url: "https://doi.org/10.1007/978-3-032-33010-9_10"
