@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/dariocazzani/intelligence-entropy/actions/workflows/ci.yml/badge.svg)](https://github.com/dariocazzani/intelligence-entropy/actions/workflows/ci.yml)
 [![Paper](https://img.shields.io/badge/paper-Springer_LNCS-0A7BBB.svg)](https://doi.org/10.1007/978-3-032-33010-9_10)
+[![alphaXiv](https://img.shields.io/badge/alphaXiv-discuss-B31B1B.svg)](https://www.alphaxiv.org/abs/2611.entropy-reduction-pragmatic-intelligence)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2E8B57.svg)](LICENSE)
 
